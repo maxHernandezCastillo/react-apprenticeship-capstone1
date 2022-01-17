@@ -1,0 +1,57 @@
+@import '@style/variables';
+@import '@style/mixins';
+
+.video-card {
+    width: 264px;
+    height: 216px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: $white;
+    border-radius: 6px;
+    cursor: pointer;
+
+    //border: 1px solid $light-border;
+    //@include drop-shadow;
+
+    &__image {
+        width: 264px;
+        height: 150px;
+        border-radius: 6px 6px 0px 0px;
+        background-color: $black;
+        object-fit: cover;
+    }
+
+    &__info {
+        width: calc(264px - 24px);
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 6px 12px 12px;
+
+        border-radius: 0px 0px 6px 6px;
+        box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+    }
+
+    &__title-column {
+        width: calc(264px - 24px - 16px - 6px);
+        height: calc(216px - 150px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__title{
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__like-icon {
+        padding-top: 0.25em;
+        color: $gray;
+    }
+}
