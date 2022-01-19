@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import he from 'he';
@@ -7,15 +8,19 @@ import './VideoCard.styles.scss';
 import { useAuth } from '@providers/Auth';
 
 function VideoCard(props) {
-  const video = props.item;
-  const { authenticated, isFavorite } = useAuth();
+  let navigate = useNavigate();
+  let { authenticated, isFavorite } = useAuth();
 
   return (
-    <div className={'video-card ' + props.className} onClick={props.onClick}>
+    <div
+      data-testid={props.testId}
+      className={'video-card ' + props.className}
+      onClick={() => navigate(`/details/${props.item.id.videoId}`)}
+    >
       <img
         src={
-          video.snippet.thumbnails.medium.url
-            ? video.snippet.thumbnails.medium.url
+          props.item.snippet.thumbnails.medium.url
+            ? props.item.snippet.thumbnails.medium.url
             : null
         }
         alt="video&#39;s image"
@@ -24,13 +29,13 @@ function VideoCard(props) {
       <div className="video-card__info">
         <div className="video-card__title-column">
           <h4 className="video-card__title">
-            {he.decode(video.snippet.title)}
+            {he.decode(props.item.snippet.title)}
           </h4>
-          <h5>{moment(new Date(video.snippet.publishTime)).fromNow()}</h5>
+          <h5>{moment(new Date(props.item.snippet.publishTime)).fromNow()}</h5>
         </div>
         {authenticated ? (
           <FontAwesomeIcon
-            icon={[isFavorite(video) ? 'fas' : 'far', 'heart']}
+            icon={[isFavorite(props.item) ? 'fas' : 'far', 'heart']}
             className="video-card__like-icon"
           />
         ) : null}
@@ -40,9 +45,15 @@ function VideoCard(props) {
 }
 
 VideoCard.defaultProps = {
+  testId: '',
   className: '',
-  item: {},
-  onClick: null,
+  item: {
+    id: { videoId: '' },
+    snippet: {
+      thumbnails: { medium: { url: '' } },
+      publishTime: new Date(0, 0, 0, 0, 0, 0, 0),
+    },
+  },
 };
 
 export default VideoCard;
