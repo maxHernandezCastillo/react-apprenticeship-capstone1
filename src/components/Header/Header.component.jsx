@@ -1,15 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-
-import './Header.styles.scss';
-import IconButton from '@components/IconButton';
-import Searchbar from '@components/SearchBar';
-import { ReactComponent as WizelineIcon } from './2D_logo_white.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import './Header.styles.scss';
+import { ReactComponent as WizelineIcon } from './2D_logo_white.svg';
+import IconButton from '@components/IconButton';
+import Searchbar from '@components/SearchBar';
+
 function Header(props) {
-  let navigate = useNavigate();
   let [searchBarFocus, onSearchBarFocusChange] = useState(false);
+
+  let navigate = useNavigate();
 
   return (
     <section
