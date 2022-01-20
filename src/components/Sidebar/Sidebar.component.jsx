@@ -5,16 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './Sidebar.styles.scss';
 import { useAuth } from '@providers/Auth';
+import { useTheme } from '@providers/Theme';
 import DefaultAvatar from './2D_logo_red.svg';
 import LoginModal from '@components/LoginModal';
 import LogoutModal from '@components/LogoutModal';
 import IconButton from '@components/IconButton';
+import Switch from '@components/Switch';
 
 function Sidebar(props) {
+  const { authenticated, userInfo } = useAuth();
+  let [theme, dispatchTheme] = useTheme();
+
   let navigate = useNavigate();
   let location = useLocation();
-
-  const { authenticated, userInfo } = useAuth();
   var { openPortal, closePortal, isOpen, Portal } = usePortal({
     bindTo: document && document.getElementById('modal-root'),
   });
@@ -25,7 +28,15 @@ function Sidebar(props) {
       className={'sidebar ' + props.className}
     >
       <div className="sidebar__close-button-container">
+        <Switch
+          label="Dark theme"
+          value={theme.darkMode}
+          onChange={() =>
+            dispatchTheme({ type: 'SET_DARK_MODE', value: !theme.darkMode })
+          }
+        />
         <IconButton
+          data-testid="sidebar__close"
           icon={<FontAwesomeIcon icon={['fas', 'times']} size="2x" />}
           className="sidebar__close-button"
           onClick={() => props.setIsSideBarOpen((prevState) => !prevState)}
@@ -40,7 +51,7 @@ function Sidebar(props) {
         <h3>{userInfo.username}</h3>
       </div>
 
-      <div
+      <button
         className={
           'sidebar__tab ' +
           (location.pathname === '/' ? 'sidebar__tab--selected' : '')
@@ -49,10 +60,10 @@ function Sidebar(props) {
       >
         <FontAwesomeIcon icon={['fas', 'home']} size="2x" />
         <h3>Home</h3>
-      </div>
+      </button>
 
       {authenticated ? (
-        <div
+        <button
           className={
             'sidebar__tab ' +
             (location.pathname === '/favorites' ? 'sidebar__tab--selected' : '')
@@ -61,12 +72,12 @@ function Sidebar(props) {
         >
           <FontAwesomeIcon icon={['fas', 'heart']} size="2x" />
           <h3>Favorites</h3>
-        </div>
+        </button>
       ) : null}
 
-      <div className="sidebar__item sidebar__link" onClick={openPortal}>
+      <button className="sidebar__item sidebar__link" onClick={openPortal}>
         {authenticated ? <h3>Logout</h3> : <h3>Login</h3>}
-      </div>
+      </button>
 
       {isOpen &&
         (authenticated ? (
@@ -85,7 +96,6 @@ function Sidebar(props) {
 Sidebar.defaultProps = {
   'data-testid': 'sidebar',
   className: '',
-  isLogged: false,
   setIsSideBarOpen: () => {},
 };
 
